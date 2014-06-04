@@ -58,7 +58,6 @@ object SbtTypeScript extends AutoPlugin {
     shellFileName := "tsc.js",
 
     sourcesDir := {
-      // Side-effecting while setting up keys seems like common sbt practice. Couldn't find better.
       val sources = (target in Plugin).value / moduleName.value
       SbtWeb.copyResourceTo(
         to = sources,
@@ -125,11 +124,9 @@ object SbtTypeScript extends AutoPlugin {
             val column = m.group("column")
             val error = m.group("error")
             val snippet = "" // No code snippet is provided for now
-            // The column number won't be logged unfortunately, even though it is available
             Some(new LineBasedProblem(error, Severity.Error, line.toInt, column.toInt, snippet, file(fileName)))
           case None =>
             streams.value.log.warn(s"Unexpected error output: $s")
-            //throw new CompileProblemsException(Array.empty)
             None
         }
       }

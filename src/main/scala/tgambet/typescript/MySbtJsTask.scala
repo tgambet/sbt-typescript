@@ -19,17 +19,6 @@ import sbt.Task
 import sbt.Configuration
 import scala.util.Try
 
-/**
- * Note to TypeSafe people : This file contains all the code I didn't want to write but had to. I thought the sbt-js-engine
- * plugin was meant to provide an abstraction over Node and hide it away. In reality Node is leaking through all the plugins
- * in the sbt-web series, including sbt-web itself. Since I am just a Web developer (that is *not* a Node developer) I had to
- * write my own plugin. I'm still using sbt-web to be compatible. In the context of this plugin I didn't have to write a
- * Node shell script, especially since Microsoft didn't provide an actual Node library (as far as I know). I'm only using
- * the command-line interface which is enough for the purpose.
- * None of this is pull-request-able in my opinion as it does not follow your "Node has won" philosophy (which I understand,
- * though I am in no rush to bow). You are free to fork and rework as you wish though. Love.
- */
-
 class JsTaskFailure(m: String) extends RuntimeException(m)
 
 object JsTaskImport {
@@ -77,8 +66,6 @@ object MySbtJsTask extends AutoPlugin {
       val argsGenerator: File => Seq[String] = (argumentsGenerator in task in config).value.apply(sources, config)
       val onOut = (onOutput in config).value
       val onErr = (onError in config).value
-
-      // TODO Figure out sbt-web incremental mechanism or write my own
 
       val modifiedSources: Seq[File] = sources
       val maxTaskTime = (timeoutPerSource in task in config).value * modifiedSources.size
